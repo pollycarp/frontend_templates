@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gothic Dark Portfolio | Frontend Artistry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+        }
+
+        :root {
+            --gothic-dark: #0a0a0a;
+            --gothic-accent: #8b0000;
+            --gothic-gold: #d4af37;
+            --gothic-silver: #c0c0c0;
+            --gothic-purple: #4a0049;
+            --gothic-light: #2a2a2a;
+            --gothic-text: #e8e8e8;
+            --blood-red: #660000;
+        }
+
+        body {
+            background: var(--gothic-dark);
+            color: var(--gothic-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 0, 0, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(139, 0, 0, 0.03) 0%, transparent 20%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gothic-dark);
+            border-left: 1px solid var(--gothic-accent);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gothic-accent);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--blood-red);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid var(--gothic-accent);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gothic-gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--gothic-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--gothic-gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gothic-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 2rem;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--gothic-gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.7);
+            opacity: 0;
+            transform: translateY(30px);
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gothic-gold), transparent);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--gothic-silver);
+            opacity: 0;
+            transform: translateY(30px);
+            font-style: italic;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--gothic-gold);
+            text-decoration: none;
+            border: 1px solid var(--gothic-gold);
+            border-radius: 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+        }
+
+        /* 3D Scene Container */
+        #scene-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Floating Candles */
+        .candles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .candle {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+            border-radius: 5px 5px 0 0;
+            box-shadow: 0 0 10px rgba(139, 0, 0, 0.3);
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 20px;
+            background: linear-gradient(to bottom, #ff4500, #8b0000);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(1px);
+            animation: flicker 3s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; height: 20px; }
+            25% { opacity: 1; height: 25px; }
+            50% { opacity: 0.7; height: 15px; }
+            75% { opacity: 0.9; height: 22px; }
+        }
+
+        /* Skills Section */
+        .skills {
+            padding: 8rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+            border-top: 1px solid var(--gothic-accent);
+            border-bottom: 1px solid var(--gothic-accent);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            color: var(--gothic-gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: var(--gothic-gold);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skill-card {
+            background: rgba(42, 42, 42, 0.7);
+            padding: 2.5rem;
+            border-radius: 0;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gothic-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 0, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gothic-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--gothic-gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gothic-silver);
+        }
+
+        .skill-card p {
+            color: #aaa;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: rgba(42, 42, 42, 0.7);
+            border-radius: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gothic-light);
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--gothic-gold);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--gothic-dark), var(--gothic-purple));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-content {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .project-tag {
+            background: rgba(139, 0, 0, 0.3);
+            color: var(--gothic-silver);
+            padding: 0.3rem 0.8rem;
+            border-radius: 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(139, 0, 0, 0.5);
+        }
+
+        /* Animated Background Elements */
+        .gothic-ornament {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .ornament-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 8rem;
+            color: var(--gothic-gold);
+            transform: rotate(-15deg);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .ornament-2 {
+            bottom: 10%;
+            right: 5%;
+            font-size: 6rem;
+            color: var(--gothic-accent);
+            transform: rotate(15deg);
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-15deg); }
+            50% { transform: translateY(-20px) rotate(-15deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--gothic-accent);
+            position: relative;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 0;
+            background: rgba(42, 42, 42, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gothic-silver);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gothic-light);
+        }
+
+        .social-link:hover {
+            background: var(--gothic-accent);
+            color: var(--gothic-text);
+            transform: translateY(-5px) scale(1.1);
+            border-color: var(--gothic-accent);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.5);
+        }
+
+        /* Bat Animation */
+        .bats-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bat {
+            position: absolute;
+            color: #333;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            animation: fly 15s linear infinite;
+        }
+
+        @keyframes fly {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(25vw) translateY(50px) rotate(5deg);
+            }
+            50% {
+                transform: translateX(50vw) translateY(0) rotate(0deg);
+            }
+            75% {
+                transform: translateX(75vw) translateY(80px) rotate(-5deg);
+            }
+            100% {
+                transform: translateX(100vw) translateY(0) rotate(0deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .skills-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gothic-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .gothic-loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .loader-inner {
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--gothic-gold);
+            border-bottom: 3px solid var(--gothic-gold);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            position: relative;
+        }
+
+        .loader-inner::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 3px solid transparent;
+            border-left: 3px solid var(--gothic-accent);
+            border-right: 3px solid var(--gothic-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="gothic-loader">
+            <div class="loader-inner"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">NOCTURNE</div>
+        <div class="nav-links">
+            <a href="#home">Sanctuary</a>
+            <a href="#skills">Arcanum</a>
+            <a href="#projects">Creations</a>
+            <a href="#contact">Ethereal</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div id="scene-container"></div>
+        <div class="candles-container" id="candlesContainer"></div>
+        <div class="bats-container" id="batsContainer"></div>
+        <div class="gothic-ornament ornament-1">†</div>
+        <div class="gothic-ornament ornament-2">‡</div>
+        
+        <div class="hero-content">
+            <h1>DARK ARTS OF WEB SORCERY</h1>
+            <p>Weaving digital spells in the shadows of innovation</p>
+            <a href="#projects" class="cta-button">Enter the Crypt</a>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <h2 class="section-title">Arcane Knowledge</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <i class="fas fa-hat-wizard skill-icon"></i>
+                <h3>Shadow JavaScript</h3>
+                <p>Mastery of ES6+, TypeScript, and dark patterns that bring interfaces to life</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-code skill-icon"></i>
+                <h3>Gothic CSS</h3>
+                <p>Artistry in dark themes, animations, and responsive necromancy</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-cube skill-icon"></i>
+                <h3>Three.js Alchemy</h3>
+                <p>Transforming digital realms with 3D sorcery and interactive portals</p>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-ghost skill-icon"></i>
+                <h3>Ethereal Animations</h3>
+                <p>Conjuring spirits of motion with GSAP and WebGL phantoms</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <h2 class="section-title">Forbidden Creations</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image"></div>
+                <div class="project-content">
+                    <h3>Crypt Keeper UI</h3>
+                    <p>A dark admin dashboard with real-time data visualization and ghostly animations</p>
+                    <div class="project-tags">
+                        <span class="project-tag">React</span>
+                        <span class="project-tag">D3.js</span>
+                        <span class="project-tag">WebGL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image"></div>
+                <div class="project-content">
+                    <h3>Haunted E-Commerce</h3>
+                    <p>Gothic online store with immersive 3D product viewing and spectral UI</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Vue.js</span>
+                        <span class="project-tag">Three.js</span>
+                        <span class="project-tag">Node.js</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image"></div>
+                <div class="project-content">
+                    <h3>Necronomicon Reader</h3>
+                    <p>Interactive digital grimoire with animated page turns and dark incantations</p>
+                    <div class="project-tags">
+                        <span class="project-tag">GSAP</span>
+                        <span class="project-tag">Canvas</span>
+                        <span class="project-tag">Web Audio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <h2 class="section-title">Summon the Darkness</h2>
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-codepen"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-skull"></i></a>
+        </div>
+        <p>&copy; 2024 Nocturne Digital Arts. All spells reserved.</p>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                initAnimations();
+            }, 2000);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // GSAP Animations
+        function initAnimations() {
+            gsap.to('.hero h1', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.5,
+                ease: "power3.out"
+            });
+
+            gsap.to('.hero p', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.8,
+                ease: "power3.out"
+            });
+
+            gsap.to('.cta-button', {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 1.1,
+                ease: "power3.out"
+            });
+
+            // Stagger animation for skill cards
+            gsap.from('.skill-card', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: '.skills',
+                    start: 'top 80%',
+                    end: 'bottom 20%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+
+            // Stagger animation for project cards
+            gsap.from('.project-card', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: '.projects',
+                    start: 'top 80%',
+                    end: 'bottom 20%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        }
+
+        // Create floating candles
+        function createCandles() {
+            const container = document.getElementById('candlesContainer');
+            const candleCount = 7;
+            
+            for (let i = 0; i < candleCount; i++) {
+                const candle = document.createElement('div');
+                candle.className = 'candle';
+                
+                // Random position
+                const left = Math.random() * 90 + 5;
+                const top = Math.random() * 80 + 10;
+                
+                candle.style.left = `${left}%`;
+                candle.style.top = `${top}%`;
+                
+                // Random animation delay
+                const delay = Math.random() * 3;
+                candle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(candle);
+            }
+        }
+
+        // Create flying bats
+        function createBats() {
+            const container = document.getElementById('batsContainer');
+            const batCount = 5;
+            
+            for (let i = 0; i < batCount; i++) {
+                const bat = document.createElement('div');
+                bat.className = 'bat';
+                bat.innerHTML = '🦇';
+                
+                // Random start position and animation delay
+                const top = Math.random() * 80 + 10;
+                const delay = Math.random() * 15;
+                
+                bat.style.top = `${top}%`;
+                bat.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(bat);
+            }
+        }
+
+        // Three.js 3D Scene - Gothic themed
+        function initThreeJS() {
+            const container = document.getElementById('scene-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            // Create gothic architecture elements
+            const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x8b0000,
+                shininess: 30,
+                transparent: true,
+                opacity: 0.7,
+                wireframe: true
+            });
+
+            const meshes = [];
+            for (let i = 0; i < 5; i++) {
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = (Math.random() - 0.5) * 10;
+                mesh.position.y = (Math.random() - 0.5) * 10;
+                mesh.position.z = (Math.random() - 0.5) * 10;
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+                scene.add(mesh);
+                meshes.push(mesh);
+            }
+
+            // Add red ambient light for gothic feel
+            const ambientLight = new THREE.AmbientLight(0x330000, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xd4af37, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            // Add point lights for candle effect
+            const pointLight1 = new THREE.PointLight(0xff4500, 1, 10);
+            pointLight1.position.set(2, 2, 2);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0x8b0000, 1, 10);
+            pointLight2.position.set(-2, -2, 2);
+            scene.add(pointLight2);
+
+            camera.position.z = 5;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+
+                meshes.forEach((mesh, index) => {
+                    mesh.rotation.x += 0.01;
+                    mesh.rotation.y += 0.01;
+                    mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.005;
+                });
+
+                // Animate point lights for flickering effect
+                pointLight1.intensity = 0.8 + Math.sin(Date.now() * 0.01) * 0.2;
+                pointLight2.intensity = 0.7 + Math.sin(Date.now() * 0.015) * 0.3;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // Initialize everything after load
+        window.addEventListener('load', () => {
+            initThreeJS();
+            createCandles();
+            createBats();
+        });
+
+        // Mouse move parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            gsap.to('.hero-content', {
+                x: moveX,
+                y: moveY,
+                duration: 1,
+                ease: "power2.out"
+            });
+            
+            gsap.to('.ornament-1', {
+                x: -moveX * 0.5,
+                y: -moveY * 0.5,
+                duration: 1.5,
+                ease: "power2.out"
+            });
+            
+            gsap.to('.ornament-2', {
+                x: moveX * 0.5,
+                y: moveY * 0.5,
+                duration: 1.5,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>
