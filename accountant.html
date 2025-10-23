@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Mitchell | Certified Public Accountant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --dark-blue: #1e40af;
+            --light-blue: #3b82f6;
+            --accent-gold: #d4af37;
+            --accent-green: #10b981;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-gray: #cbd5e1;
+            --border-color: #334155;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a237e 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--light-blue);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 1rem 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 2rem;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-gray);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--accent-gold);
+            color: var(--dark-bg);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+            background: #e6c34e;
+        }
+
+        /* Animated Background Elements */
+        .financial-element {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .element-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 4rem;
+            color: var(--accent-gold);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .element-2 {
+            bottom: 10%;
+            right: 5%;
+            font-size: 3rem;
+            color: var(--accent-green);
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        .element-3 {
+            top: 50%;
+            left: 10%;
+            font-size: 2.5rem;
+            color: var(--light-blue);
+            animation: float 12s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--card-bg);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-gray);
+        }
+
+        .certifications {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cert-item {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .cert-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cert-item i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--dark-bg);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .service-card p {
+            color: var(--text-gray);
+        }
+
+        /* Experience Section */
+        .experience {
+            background: var(--card-bg);
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: var(--accent-gold);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+            width: 50%;
+            padding: 0 2rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            background: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -40px;
+        }
+
+        .timeline-date {
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Financial Metrics Section */
+        .metrics {
+            background: var(--dark-bg);
+        }
+
+        .metrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold);
+        }
+
+        .metric-label {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: var(--card-bg);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--text-gray);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-bg);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--dark-bg);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            width: 40px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--accent-gold);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #e6c34e;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card-bg);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--dark-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--accent-gold);
+            color: var(--dark-bg);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-content::before {
+                left: -40px !important;
+            }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(212, 175, 55, 0.3);
+            border-top: 5px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Ensure all sections are visible */
+        section {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <p>Loading Financial Portfolio...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Sarah<span>Mitchell</span>.CPA</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#experience">Experience</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="financial-element element-1"><i class="fas fa-chart-line"></i></div>
+        <div class="financial-element element-2"><i class="fas fa-calculator"></i></div>
+        <div class="financial-element element-3"><i class="fas fa-balance-scale"></i></div>
+        
+        <div class="hero-content">
+            <h1>Sarah Mitchell, CPA</h1>
+            <h2>Certified Public Accountant & Financial Strategist</h2>
+            <p>Providing expert financial guidance and strategic accounting solutions to help businesses thrive in today's complex economic landscape. With over 12 years of experience, I specialize in tax optimization, financial reporting, and business advisory services.</p>
+            <a href="#contact" class="cta-button">Schedule Consultation</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <h2 class="section-title">Professional Profile</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>Trusted Financial Expertise</h3>
+                <p>With over 12 years of experience in corporate accounting and financial management, I specialize in helping businesses optimize their financial operations, ensure compliance, and drive sustainable growth.</p>
+                <p>My approach combines technical expertise with strategic insight, delivering solutions that not only address immediate accounting needs but also contribute to long-term business success.</p>
+                <p>I hold a Master's degree in Accounting from Wharton School of Business and maintain active memberships in leading professional accounting organizations including the AICPA and state CPA societies.</p>
+                <p>My philosophy centers on building long-term client relationships based on trust, transparency, and measurable results. I believe that effective financial management should be accessible and understandable to business leaders.</p>
+            </div>
+            <div class="certifications">
+                <div class="cert-item">
+                    <i class="fas fa-award"></i>
+                    <h4>Certified Public Accountant</h4>
+                    <p>Licensed CPA with extensive audit and tax experience across multiple states</p>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Certified Financial Analyst</h4>
+                    <p>Expert in financial analysis, valuation, and strategic planning</p>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>Masters in Accounting</h4>
+                    <p>Wharton School of Business, 2010 - Graduated with Honors</p>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>IRS Enrolled Agent</h4>
+                    <p>Authorized to represent taxpayers before the IRS in all 50 states</p>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4>QuickBooks ProAdvisor</h4>
+                    <p>Certified expert in QuickBooks implementation and optimization</p>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-users"></i>
+                    <h4>AICPA Member</h4>
+                    <p>Active member of American Institute of CPAs since 2012</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <h2 class="section-title">Professional Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-file-invoice-dollar service-icon"></i>
+                <h3>Tax Planning & Preparation</h3>
+                <p>Comprehensive tax strategy development and meticulous preparation services to minimize liabilities and ensure compliance with federal, state, and local regulations. Includes quarterly estimates and year-end planning.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>Business & Personal Tax Returns</li>
+                    <li>Tax Strategy Consulting</li>
+                    <li>IRS Representation</li>
+                    <li>Quarterly Estimates & Planning</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-chart-bar service-icon"></i>
+                <h3>Financial Reporting</h3>
+                <p>Accurate and timely financial statements, cash flow analysis, and performance metrics to support informed decision-making. Customized reporting packages tailored to your business needs.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>Monthly Financial Statements</li>
+                    <li>Cash Flow Analysis</li>
+                    <li>KPI Dashboards</li>
+                    <li>Board Reporting Packages</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-search-dollar service-icon"></i>
+                <h3>Audit & Assurance</h3>
+                <p>Independent financial audits and reviews to validate financial integrity and enhance stakeholder confidence. Preparation for lender requirements and investor due diligence.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>Financial Statement Audits</li>
+                    <li>Review & Compilation Services</li>
+                    <li>Internal Control Evaluation</li>
+                    <li>Due Diligence Support</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-cogs service-icon"></i>
+                <h3>Accounting Systems</h3>
+                <p>Implementation and optimization of accounting software and processes to improve efficiency and accuracy. Training and support for your team to ensure smooth operations.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>QuickBooks Implementation</li>
+                    <li>Process Optimization</li>
+                    <li>Staff Training & Support</li>
+                    <li>System Migration</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-hand-holding-usd service-icon"></i>
+                <h3>Business Advisory</h3>
+                <p>Strategic financial guidance for business planning, growth initiatives, and operational improvements. Help with budgeting, forecasting, and financial modeling.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>Budgeting & Forecasting</li>
+                    <li>Financial Modeling</li>
+                    <li>Business Valuation</li>
+                    <li>Strategic Planning</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-user-tie service-icon"></i>
+                <h3>CFO Services</h3>
+                <p>Part-time CFO support for businesses needing executive-level financial leadership without full-time commitment. Strategic financial management and decision support.</p>
+                <ul style="text-align: left; margin-top: 1rem; color: var(--text-gray);">
+                    <li>Financial Strategy Development</li>
+                    <li>Cash Management</li>
+                    <li>Investor Relations</li>
+                    <li>Executive Decision Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience" id="experience">
+        <h2 class="section-title">Professional Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2018 - Present</div>
+                    <h3>Senior Financial Consultant</h3>
+                    <h4>Strategic Financial Partners</h4>
+                    <p>Lead financial consulting engagements for mid-sized businesses, providing strategic guidance on financial operations, tax planning, and growth initiatives. Managed client portfolios with combined revenues exceeding $50M annually.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-gray);">
+                        <li>Developed tax strategies saving clients an average of 18% annually</li>
+                        <li>Implemented financial systems improving reporting efficiency by 40%</li>
+                        <li>Advised on M&A transactions totaling over $25M in value</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2014 - 2018</div>
+                    <h3>Accounting Manager</h3>
+                    <h4>Global Tech Solutions</h4>
+                    <p>Oversaw all accounting operations for a rapidly growing technology firm. Implemented new financial systems that improved reporting efficiency by 40% and reduced closing time by 5 days.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-gray);">
+                        <li>Managed team of 5 accounting professionals</li>
+                        <li>Reduced audit preparation time by 30% through process improvements</li>
+                        <li>Implemented automated reporting saving 20+ hours weekly</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2010 - 2014</div>
+                    <h3>Senior Auditor</h3>
+                    <h4>Deloitte & Touche</h4>
+                    <p>Conducted financial audits for Fortune 500 clients across multiple industries. Developed risk assessment frameworks and led audit teams through complex engagement scenarios.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-gray);">
+                        <li>Led audits for clients with revenues up to $500M</li>
+                        <li>Identified control deficiencies saving clients potential losses of $2M+</li>
+                        <li>Mentored junior staff members and conducted training sessions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2008 - 2010</div>
+                    <h3>Staff Accountant</h3>
+                    <h4>Anderson Financial Services</h4>
+                    <p>Managed accounts payable/receivable, payroll processing, and monthly closing procedures. Assisted in tax preparation and developed foundational expertise in accounting principles.</p>
+                    <ul style="margin-top: 1rem; color: var(--text-gray);">
+                        <li>Processed 200+ transactions daily with 99.8% accuracy</li>
+                        <li>Reduced accounts receivable aging by 15 days</li>
+                        <li>Assisted in preparation of 150+ business and individual tax returns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Metrics Section -->
+    <section class="metrics" id="metrics">
+        <h2 class="section-title">Performance Metrics</h2>
+        <div class="metrics-container">
+            <div class="metric-card">
+                <div class="metric-value">$2.5M+</div>
+                <div class="metric-label">Tax Savings Identified for Clients</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">150+</div>
+                <div class="metric-label">Business Clients Served</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">98%</div>
+                <div class="metric-label">Client Retention Rate</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">12</div>
+                <div class="metric-label">Years Professional Experience</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$50M+</div>
+                <div class="metric-label">Client Revenue Managed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">Audit Success Rate</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title">Client Testimonials</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Sarah's expertise in tax strategy saved our company over $200,000 in the first year alone. Her attention to detail and strategic approach to financial management has been invaluable to our growth. She doesn't just do our taxes - she helps us understand our financial position and make better business decisions."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MJ</div>
+                    <div class="author-info">
+                        <h4>Michael Johnson</h4>
+                        <p>CEO, Tech Innovations Inc.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Working with Sarah transformed our financial operations. She implemented systems that improved our reporting accuracy and gave us the insights we needed to make better business decisions. Her proactive approach to tax planning has saved us significant money year after year."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SR</div>
+                    <div class="author-info">
+                        <h4>Sarah Rodriguez</h4>
+                        <p>COO, Manufacturing Solutions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "As a small business owner, I needed financial guidance I could trust. Sarah provided exactly that - clear, actionable advice that helped us navigate complex financial challenges with confidence. Her monthly financial reviews have become invaluable to our strategic planning process."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">DW</div>
+                    <div class="author-info">
+                        <h4>David Wilson</h4>
+                        <p>Owner, Wilson Retail Group</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    "Sarah's audit preparation services were exceptional. She helped us navigate our first major financial audit with ease, and the auditors commented on how well-prepared our records were. Her expertise gave our board and investors complete confidence in our financial reporting."
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AK</div>
+                    <div class="author-info">
+                        <h4>Amanda Kim</h4>
+                        <p>CFO, Healthcare Solutions Group</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h3>Email</h3>
+                        <p>sarah.mitchell@example.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h3>Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3>Office</h3>
+                        <p>123 Financial District, New York, NY 10005</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h3>Business Hours</h3>
+                        <p>Mon-Fri: 9:00 AM - 6:00 PM EST</p>
+                        <p>Sat: By appointment only</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-file-pdf"></i>
+                    <div>
+                        <h3>Resources</h3>
+                        <p><a href="#" style="color: var(--accent-gold);">Download Financial Planning Guide</a></p>
+                        <p><a href="#" style="color: var(--accent-gold);">Tax Checklist for Small Businesses</a></p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <div>
+                        <h3>Consultation</h3>
+                        <p>Complimentary 30-minute initial consultation available for new clients</p>
+                    </div>
+                </div>
+            </div>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone">
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company">
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Needed *</label>
+                    <select id="service" required>
+                        <option value="">Select a service</option>
+                        <option value="tax">Tax Planning & Preparation</option>
+                        <option value="reporting">Financial Reporting</option>
+                        <option value="audit">Audit & Assurance</option>
+                        <option value="systems">Accounting Systems</option>
+                        <option value="advisory">Business Advisory</option>
+                        <option value="cfo">CFO Services</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">How can I help you? *</label>
+                    <textarea id="message" required placeholder="Please describe your accounting needs, challenges, or questions..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p>&copy; 2023 Sarah Mitchell, CPA. All rights reserved.</p>
+        <p style="margin-top: 1rem; color: var(--text-gray); font-size: 0.9rem;">Certified Public Accountant | Financial Strategist | Business Advisor</p>
+        <p style="margin-top: 0.5rem; color: var(--text-gray); font-size: 0.8rem;">Licensed in NY, NJ, CT, and PA</p>
+    </footer>
+
+    <script>
+        // Loading Screen
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen after page is fully loaded
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    initAnimations();
+                }, 1500);
+            });
+
+            // Fallback in case load event doesn't fire
+            setTimeout(function() {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                initAnimations();
+            }, 3000);
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // GSAP Animations
+        function initAnimations() {
+            // Check if GSAP is available
+            if (typeof gsap === 'undefined') {
+                console.warn('GSAP not loaded, skipping animations');
+                // Fallback: make elements visible
+                document.querySelectorAll('.hero h1, .hero h2, .hero p, .cta-button').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+                return;
+            }
+
+            // Hero animations
+            gsap.to('.hero h1', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.5
+            });
+
+            gsap.to('.hero h2', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.8
+            });
+
+            gsap.to('.hero p', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1.1
+            });
+
+            gsap.to('.cta-button', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 1.4
+            });
+
+            // Section animations with ScrollTrigger if available
+            if (typeof ScrollTrigger !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                
+                gsap.utils.toArray('section').forEach(section => {
+                    gsap.from(section, {
+                        opacity: 0,
+                        y: 50,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: section,
+                            start: 'top 80%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    });
+                });
+            }
+        }
+
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you within 24 hours.');
+            this.reset();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
